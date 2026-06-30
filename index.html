@@ -210,32 +210,34 @@ Otis News Board | GitHub Pages
 
 let allNews=[];
 
-async function loadNews(){
+async function loadNews() {
 
-document.getElementById("news").innerHTML="Loading latest news...";
+    try {
 
-try{
+        const response =
+            await fetch('./news.json?' + new Date().getTime());
 
-const response=await fetch(
-"https://api.rss2json.com/v1/api.json?rss_url=https://news.google.com/rss/search?q=Otis+elevator"
-);
+        const data =
+            await response.json();
 
-const data=await response.json();
+        allNews = data;
 
-allNews=data.items;
+        renderNews(data);
 
-renderNews(allNews);
+        document.getElementById("updated").innerHTML =
+            "Last updated: " +
+            new Date().toLocaleString();
 
-document.getElementById("updated").innerHTML=
-"Last updated: " + new Date().toLocaleString();
+    }
 
-}
-catch(err){
+    catch(error) {
 
-document.getElementById("news").innerHTML=
-"Unable to load live news. Please use the official links above.";
+        document.getElementById("news").innerHTML =
+            "Unable to load news feed.";
 
-}
+        console.log(error);
+
+    }
 
 }
 
