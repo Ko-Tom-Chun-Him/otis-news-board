@@ -196,8 +196,8 @@ class="search"
 placeholder="Search news..."
 onkeyup="filterNews()">
 
-https://news.google.com/search?q=Otis%20elevator
-
+<div id="news">
+Loading...
 </div>
 
 </div>
@@ -211,78 +211,57 @@ Otis News Board | GitHub Pages
 let allNews=[];
 
 async function loadNews() {
-
     try {
-
-        const response =
-            await fetch('./news.json?' + new Date().getTime());
-
-        const data =
-            await response.json();
+        const response = await fetch('./news.json?' + Date.now());
+        const data = await response.json();
 
         allNews = data;
-
         renderNews(data);
 
-        document.getElementById("updated").innerHTML =
-            "Last updated: " +
-            new Date().toLocaleString();
+        document.getElementById("updated").innerText =
+            "Last updated: " + new Date().toLocaleString();
 
+    } catch (e) {
+        document.getElementById("news").innerText =
+            "Failed to load news feed.";
+        console.error(e);
     }
-
-    catch(error) {
-
-        document.getElementById("news").innerHTML =
-            "Unable to load news feed.";
-
-        console.log(error);
-
-    }
-
 }
 
-function renderNews(items){
+function renderNews(items) {
+    const newsDiv = document.getElementById("news");
+    newsDiv.innerHTML = "";
 
-const newsDiv=document.getElementById("news");
+    if (items.length === 0) {
+        newsDiv.innerHTML = "No news available.";
+        return;
+    }
 
-newsDiv.innerHTML="";
+    items.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "news-item";
 
-items.forEach(item=>{
+        div.innerHTML = `
+            ${item.link}
+                ${item.title}
+            </a><br>
+            <small>${item.pubDate}</small>
+        `;
 
-newsDiv.innerHTML += `
-<div class="news-item">
-
-${item.link}
-${item.title}
-</a>
-
-<br>
-
-<small>
-${new Date(item.pubDate).toLocaleString()}
-</small>
-
-</div>
-`;
-
-});
-
+        newsDiv.appendChild(div);
+    });
 }
 
-function filterNews(){
+function filterNews() {
+    const keyword =
+        document.getElementById("searchBox").value.toLowerCase();
 
-const keyword=
-document.getElementById("searchBox")
-.value
-.toLowerCase();
+    const filtered =
+        allNews.filter(n =>
+            n.title.toLowerCase().includes(keyword)
+        );
 
-const filtered=
-allNews.filter(
-n=>n.title.toLowerCase().includes(keyword)
-);
-
-renderNews(filtered);
-
+    renderNews(filtered);
 }
 
 function toggleDarkMode(){
