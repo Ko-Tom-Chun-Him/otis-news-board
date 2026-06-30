@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Otis News Hub</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f5f7fa;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:20px;
+    margin-bottom:20px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+
+h1{
+    margin-top:0;
+}
+
+.news-item{
+    border-bottom:1px solid #eee;
+    padding:12px 0;
+}
+
+.news-item:last-child{
+    border-bottom:none;
+}
+
+a{
+    color:#0066cc;
+    text-decoration:none;
+}
+
+a:hover{
+    text-decoration:underline;
+}
+
+button{
+    background:#0066cc;
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#0052a3;
+}
+
+.status{
+    color:#666;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="card">
+        <h1>🏢 Otis News Hub</h1>
+        <p>Monitor major Otis announcements, earnings, projects, products and industry news.</p>
+
+        <button onclick="loadNews()">Refresh News</button>
+        <p class="status" id="status">Ready</p>
+    </div>
+
+    <div class="card">
+        <h2>Quick Links</h2>
+        <ul>
+            <li>https://investors.otis.com/news-events/press-releases</li>
+            <li>ors.otis.com/">Otis Investor Relations</a></li>
+            <li>https://www.otis.com/en/us/newsOtis Newsroom</a></li>
+            <li>?q=Otis%20elevator">Google News - Otis</a></li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>Latest Otis Headlines</h2>
+        <div id="news">
+            Loading...
+        </div>
+    </div>
+
+</div>
+
+<script>
+async function loadNews() {
+
+    const newsDiv = document.getElementById("news");
+    const status = document.getElementById("status");
+
+    status.textContent = "Loading latest news...";
+
+    try {
+
+        const url =
+        "https://api.rss2json.com/v1/api.json?rss_url=https://news.google.com/rss/search?q=Otis+elevator";
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        newsDiv.innerHTML = "";
+
+        data.items.slice(0,15).forEach(item => {
+
+            const div = document.createElement("div");
+            div.className = "news-item";
+
+            div.innerHTML = `
+                <h3>
+                    ${item.link}
+                        ${item.title}
+                    </a>
+                </h3>
+                <small>${new Date(item.pubDate).toLocaleString()}</small>
+            `;
+
+            newsDiv.appendChild(div);
+        });
+
+        status.textContent =
+        "Last updated: " + new Date().toLocaleString();
+
+    } catch(error) {
+
+        newsDiv.innerHTML =
+        "Unable to load news. Use the Quick Links above.";
+
+        status.textContent = "Load failed";
+    }
+}
+
+loadNews();
+</script>
+
+</body>
+</html>
