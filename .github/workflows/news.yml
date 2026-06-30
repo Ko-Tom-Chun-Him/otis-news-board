@@ -1,0 +1,53 @@
+name: Update Otis News
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-news:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch Google News RSS
+        run: |
+          curl -L "https://news.google.com/rss/search?q=Otis+elevator" -o news.xml
+
+      - name: Convert RSS to JSON
+        run: |
+          python << EOF
+          import xml.etree.ElementTree as ET
+          import json
+
+          tree = ET.parse('news.xml')
+          root = tree.getroot()
+
+          items = []
+
+          for item in root.findall('.//item')[:20]:
+              items.append({
+                  'title': item.findtext('title'),
+                  'link': item.findtext('link'),
+                  'pubDate': item.findtext('pubDate')
+              })
+
+          with open('news.json','w',encoding='utf-8') as f:
+              json.dump(items,f,indent=2,ensure_ascii=False)
+          EOF
+
+      - name: Commit updates
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add news.json
+
+          git diff --cached --quiet || git commit -m "Update news"
+
+          git push
