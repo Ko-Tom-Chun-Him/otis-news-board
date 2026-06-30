@@ -3,148 +3,307 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Otis News Hub</title>
+<title>Otis News Board</title>
 
 <style>
+:root{
+    --bg:#f4f6f8;
+    --card:#ffffff;
+    --text:#222;
+    --accent:#003b70;
+    --border:#e5e7eb;
+}
+
+.dark{
+    --bg:#0f172a;
+    --card:#1e293b;
+    --text:#f8fafc;
+    --accent:#4da3ff;
+    --border:#334155;
+}
+
 body{
-    font-family: Arial, sans-serif;
-    background:#f5f7fa;
     margin:0;
+    font-family:Segoe UI,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    transition:.3s;
+}
+
+.header{
+    background:var(--accent);
+    color:white;
     padding:20px;
 }
 
 .container{
-    max-width:1100px;
+    max-width:1200px;
     margin:auto;
+    padding:20px;
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
 }
 
 .card{
-    background:white;
-    border-radius:15px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
     padding:20px;
     margin-bottom:20px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.1);
 }
 
-h1{
-    margin-top:0;
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+@media(max-width:900px){
+.grid{
+grid-template-columns:1fr;
+}
+}
+
+button{
+    background:white;
+    border:none;
+    border-radius:8px;
+    padding:10px 15px;
+    cursor:pointer;
+}
+
+.search{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    margin-bottom:15px;
 }
 
 .news-item{
-    border-bottom:1px solid #eee;
     padding:12px 0;
+    border-bottom:1px solid var(--border);
 }
 
 .news-item:last-child{
     border-bottom:none;
 }
 
-a{
-    color:#0066cc;
+.news-item a{
+    color:var(--accent);
     text-decoration:none;
+    font-weight:bold;
 }
 
-a:hover{
-    text-decoration:underline;
+.badge{
+    background:#dbeafe;
+    color:#1e40af;
+    border-radius:20px;
+    padding:6px 12px;
+    display:inline-block;
+    margin-right:8px;
+    margin-top:8px;
 }
 
-button{
-    background:#0066cc;
+.refresh{
+    background:var(--accent);
     color:white;
-    border:none;
-    padding:10px 15px;
-    border-radius:8px;
-    cursor:pointer;
 }
 
-button:hover{
-    background:#0052a3;
+.footer{
+    text-align:center;
+    color:gray;
+    padding:20px;
 }
 
-.status{
-    color:#666;
+.stats{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
 }
 </style>
 </head>
+
 <body>
+
+<div class="header">
+    <div class="container topbar">
+        <div>
+            <h1>🏢 Otis News Board</h1>
+            <div>Latest Otis news, stock, projects and announcements</div>
+        </div>
+
+        <div>
+            <button onclick="toggleDarkMode()">🌙 Dark Mode</button>
+        </div>
+    </div>
+</div>
 
 <div class="container">
 
-    <div class="card">
-        <h1>🏢 Otis News Hub</h1>
-        <p>Monitor major Otis announcements, earnings, projects, products and industry news.</p>
-
-        <button onclick="loadNews()">Refresh News</button>
-        <p class="status" id="status">Ready</p>
+<div class="card">
+    <div class="stats">
+        <span class="badge">NYSE: OTIS</span>
+        <span class="badge">Investor News</span>
+        <span class="badge">Industry Updates</span>
     </div>
+</div>
 
-    <div class="card">
-        <h2>Quick Links</h2>
-        <ul>
-            <li>https://investors.otis.com/news-events/press-releases</li>
-            <li>ors.otis.com/">Otis Investor Relations</a></li>
-            <li>https://www.otis.com/en/us/newsOtis Newsroom</a></li>
-            <li>?q=Otis%20elevator">Google News - Otis</a></li>
-        </ul>
-    </div>
+<div class="grid">
 
-    <div class="card">
-        <h2>Latest Otis Headlines</h2>
-        <div id="news">
-            Loading...
-        </div>
-    </div>
+<div class="card">
+
+<h2>📈 OTIS Stock</h2>
+
+https://s.tradingview.com/widgetembed/?symbol=NYSE%3AOTIS&interval=D&theme=light
 
 </div>
 
+<div class="card">
+
+<h2>🔗 Official Sources</h2>
+
+<ul>
+<li>https://investors.otis.com/news-events/press-releasesOtis Investor Relations</a></li>
+<li>https://www.otis.com/en/us/news">Otis Newsroom</a></li>
+<li>https://investors.otis.com/Investor Center</a></li>
+<li>https://news.google.com/search?q=Otis%20elevator</li>
+</ul>
+
+<p id="updated">Ready</p>
+
+<button class="refresh" onclick="loadNews()">
+Refresh News
+</button>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>📰 Live Otis News Feed</h2>
+
+<input
+type="text"
+id="searchBox"
+class="search"
+placeholder="Search news..."
+onkeyup="filterNews()">
+
+<div id="news">
+Loading...
+</div>
+
+</div>
+
+</div>
+
+<div class="footer">
+Otis News Board | GitHub Pages
+</div>
+
 <script>
-async function loadNews() {
 
-    const newsDiv = document.getElementById("news");
-    const status = document.getElementById("status");
+let allNews=[];
 
-    status.textContent = "Loading latest news...";
+async function loadNews(){
 
-    try {
+document.getElementById("news").innerHTML="Loading latest news...";
 
-        const url =
-        "https://api.rss2json.com/v1/api.json?rss_url=https://news.google.com/rss/search?q=Otis+elevator";
+try{
 
-        const response = await fetch(url);
-        const data = await response.json();
+const response=await fetch(
+"https://api.rss2json.com/v1/api.json?rss_url=https://news.google.com/rss/search?q=Otis+elevator"
+);
 
-        newsDiv.innerHTML = "";
+const data=await response.json();
 
-        data.items.slice(0,15).forEach(item => {
+allNews=data.items;
 
-            const div = document.createElement("div");
-            div.className = "news-item";
+renderNews(allNews);
 
-            div.innerHTML = `
-                <h3>
-                    ${item.link}
-                        ${item.title}
-                    </a>
-                </h3>
-                <small>${new Date(item.pubDate).toLocaleString()}</small>
-            `;
+document.getElementById("updated").innerHTML=
+"Last updated: " + new Date().toLocaleString();
 
-            newsDiv.appendChild(div);
-        });
+}
+catch(err){
 
-        status.textContent =
-        "Last updated: " + new Date().toLocaleString();
+document.getElementById("news").innerHTML=
+"Unable to load live news. Please use the official links above.";
 
-    } catch(error) {
+}
 
-        newsDiv.innerHTML =
-        "Unable to load news. Use the Quick Links above.";
+}
 
-        status.textContent = "Load failed";
-    }
+function renderNews(items){
+
+const newsDiv=document.getElementById("news");
+
+newsDiv.innerHTML="";
+
+items.forEach(item=>{
+
+newsDiv.innerHTML += `
+<div class="news-item">
+
+${item.link}
+${item.title}
+</a>
+
+<br>
+
+<small>
+${new Date(item.pubDate).toLocaleString()}
+</small>
+
+</div>
+`;
+
+});
+
+}
+
+function filterNews(){
+
+const keyword=
+document.getElementById("searchBox")
+.value
+.toLowerCase();
+
+const filtered=
+allNews.filter(
+n=>n.title.toLowerCase().includes(keyword)
+);
+
+renderNews(filtered);
+
+}
+
+function toggleDarkMode(){
+
+document.body.classList.toggle("dark");
+
+localStorage.setItem(
+"theme",
+document.body.classList.contains("dark")
+? "dark"
+: "light"
+);
+
+}
+
+if(localStorage.getItem("theme")==="dark"){
+document.body.classList.add("dark");
 }
 
 loadNews();
+
 </script>
 
 </body>
