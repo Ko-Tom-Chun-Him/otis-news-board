@@ -158,6 +158,11 @@ button{
 
 <div class="card">
 
+<div class="card" id="topStory">
+  <h2>⭐ Top Story</h2>
+  <div id="topStoryContent">Loading top story...</div>
+</div>
+
 <h2>📈 OTIS Stock</h2>
 
 https://s.tradingview.com/widgetembed/?symbol=NYSE%3AOTIS&interval=D&theme=light
@@ -216,6 +221,8 @@ async function loadNews() {
         const data = await response.json();
 
         allNews = data;
+
+        renderTopStory(data[0]);
         renderNews(data);
 
         document.getElementById("updated").innerText =
@@ -250,6 +257,24 @@ function renderNews(items) {
 
         newsDiv.appendChild(div);
     });
+}
+
+function renderTopStory(item) {
+    const top = document.getElementById("topStoryContent");
+
+    if (!item) {
+        top.innerText = "No top story available.";
+        return;
+    }
+
+    top.innerHTML = `
+        <h3>
+            ${item.link}
+                ${item.title}
+            </a>
+        </h3>
+        <small>${item.pubDate}</small>
+    `;
 }
 
 function filterNews() {
