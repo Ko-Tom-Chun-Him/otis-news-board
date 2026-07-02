@@ -146,12 +146,24 @@ button{
 
 <div class="container">
 
-    <div class="card">
-        <div class="stats">
-            <span class="badge">NYSE: OTIS</span>
-            <span class="badge">Investor News</span>
-            <span class="badge">Industry Updates</span>
-        </div>
+    <div class="stats">
+
+        <span class="badge">
+        🏢 Official News
+        </span>
+        
+        <span class="badge">
+        📈 OTIS Stock
+        </span>
+        
+        <span class="badge">
+        🌏 APAC Updates
+        </span>
+        
+        <span class="badge">
+        🛠 Modernization
+        </span>
+        
     </div>
 
     <div class="card">
@@ -229,6 +241,69 @@ button{
 <script>
 
 let allNews=[];
+let officialNews = [];
+
+async function loadOfficialNews() {
+
+    try {
+
+        const response =
+            await fetch('./official-news.json?' + Date.now());
+
+        const data =
+            await response.json();
+
+        officialNews = data;
+
+        const container =
+            document.getElementById("officialNews");
+
+        container.innerHTML = "";
+
+        if(data.length === 0){
+
+            container.innerHTML =
+                "No official announcements available.";
+
+            return;
+        }
+
+        data.forEach(item => {
+
+            container.innerHTML += `
+                <div class="news-item">
+                    <span class="badge">
+                        Official Otis
+                    </span>
+                    <br>
+
+                    <a href="${item.link}"
+                       target="_blank">
+                        ${item.title}
+                    </a>
+
+                    <br>
+
+                    <small>
+                        ${item.pubDate}
+                    </small>
+                </div>
+            `;
+
+        });
+
+    }
+
+    catch(error){
+
+        document.getElementById("officialNews")
+            .innerHTML =
+            "Unable to load official announcements.";
+
+        console.log(error);
+
+    }
+}
 
 async function loadNews() {
     try {
@@ -340,6 +415,7 @@ document.body.classList.add("dark");
 }
 
 loadNews();
+loadOfficialNews();
 
 </script>
 
