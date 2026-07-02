@@ -146,80 +146,79 @@ button{
 
 <div class="container">
 
-<div class="card">
-    <div class="stats">
-        <span class="badge">NYSE: OTIS</span>
-        <span class="badge">Investor News</span>
-        <span class="badge">Industry Updates</span>
+    <div class="card">
+        <div class="stats">
+            <span class="badge">NYSE: OTIS</span>
+            <span class="badge">Investor News</span>
+            <span class="badge">Industry Updates</span>
+        </div>
     </div>
-</div>
 
-<div class="card">
-  <h2>🤖 Daily AI Summary</h2>
-  <p>
-    Otis continues to focus on modernization, digital elevator solutions,
-    and infrastructure growth. Recent coverage highlights stable financial
-    performance, expanding data‑center elevator demand, and continued
-    investment in Asia‑Pacific markets.
-  </p>
-</div>
+    <div class="card">
+        <h2>🤖 Daily AI Summary</h2>
+        <p>
+            Otis continues to focus on modernization, digital elevator solutions,
+            and infrastructure growth. Recent coverage highlights stable financial
+            performance, expanding data‑center elevator demand, and continued
+            investment in Asia‑Pacific markets.
+        </p>
+    </div>
 
-<div class="grid">
+    <div class="card" id="topStory">
+        <h2>⭐ Top Story</h2>
+        <div id="topStoryContent">Loading top story...</div>
+    </div>
+    
+    <div class="grid">
+        <div class="card">
+            <h2>📈 OTIS Stock (NYSE)</h2>
+    
+            https://s.tradingview.com/widgetembed/?symbol=NYSE%3AOTIS&interval=D&theme=light&style=1&locale=en
+            </iframe>
+    
+        </div>
+    
+        <div class="card">
+    
+            <h2>🔗 Official Sources</h2>
+    
+            <ul>
+            <li>https://investors.otis.com/news-events/press-releasesOtis Investor Relations</a></li>
+            <li>https://www.otis.com/en/us/news">Otis Newsroom</a></li>
+            <li>https://investors.otis.com/Investor Center</a></li>
+            <li>https://news.google.com/search?q=Otis%20elevator</li>
+            </ul>
+                
+            <p id="updated">Ready</p>
+    
+            <button class="refresh" onclick="loadNews()">
+            Refresh News
+            </button>
+    
+        </div>
+    
+    </div>
 
-<div class="card" id="topStory">
-  <h2>⭐ Top Story</h2>
-  <div id="topStoryContent">Loading top story...</div>
-</div>
+    <div class="card">
 
-<div class="card">
-<h2>📈 OTIS Stock (NYSE)</h2>
+        <h2>📰 Live Otis News Feed</h2>
 
-https://s.tradingview.com/widgetembed/?symbol=NYSE%3AOTIS&interval=D&theme=light&style=1&locale=en
-</iframe>
+        <input
+        type="text"
+        id="searchBox"
+        class="search"
+        placeholder="Search news..."
+        onkeyup="filterNews()">
 
-</div>
+        <div id="news">
+        Loading...
+        </div>
 
-<div class="card">
+    </div>
 
-<h2>🔗 Official Sources</h2>
-
-<ul>
-<li>https://investors.otis.com/news-events/press-releasesOtis Investor Relations</a></li>
-<li>https://www.otis.com/en/us/news">Otis Newsroom</a></li>
-<li>https://investors.otis.com/Investor Center</a></li>
-<li>https://news.google.com/search?q=Otis%20elevator</li>
-</ul>
-
-<p id="updated">Ready</p>
-
-<button class="refresh" onclick="loadNews()">
-Refresh News
-</button>
-
-</div>
-
-</div>
-
-<div class="card">
-
-<h2>📰 Live Otis News Feed</h2>
-
-<input
-type="text"
-id="searchBox"
-class="search"
-placeholder="Search news..."
-onkeyup="filterNews()">
-
-<div id="news">
-Loading...
-</div>
-
-</div>
-
-<div class="footer">
-Otis News Board | GitHub Pages
-</div>
+    <div class="footer">
+    Otis News Board | GitHub Pages
+    </div>
 
 <script>
 
