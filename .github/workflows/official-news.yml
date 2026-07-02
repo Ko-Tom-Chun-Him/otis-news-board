@@ -1,0 +1,57 @@
+name: Update Official Otis News
+
+on:
+  schedule:
+    - cron: '15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-official-news:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch Official Otis News
+        run: |
+          curl -L "https://www.otis.com/en/us/news/rss" -o official.xml || true
+
+      - name: Build JSON
+        run: |
+          python << EOF
+          import json
+          import xml.etree.ElementTree as ET
+          import os
+
+          items=[]
+
+          if os.path.exists("official.xml"):
+              try:
+                  tree=ET.parse("official.xml")
+
+                  for item in tree.findall(".//item")[:20]:
+                      items.append({
+                          "title": item.findtext("title"),
+                          "link": item.findtext("link"),
+                          "pubDate": item.findtext("pubDate")
+                      })
+              except:
+                  pass
+
+          with open("official-news.json","w",encoding="utf-8") as f:
+              json.dump(items,f,indent=2,ensure_ascii=False)
+          EOF
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add official-news.json
+
+          git diff --cached --quiet || git commit -m "Update official news"
+
+          git push
