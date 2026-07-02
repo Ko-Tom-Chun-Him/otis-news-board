@@ -248,7 +248,10 @@ function renderNews(items) {
         const div = document.createElement("div");
         div.className = "news-item";
 
+        const category = getCategory(item.title);
+
         div.innerHTML = `
+            <span class="badge">${category}</span><br>
             ${item.link}
                 ${item.title}
             </a><br>
@@ -291,15 +294,30 @@ function filterNews() {
 
 function toggleDarkMode(){
 
-document.body.classList.toggle("dark");
+    document.body.classList.toggle("dark");
 
-localStorage.setItem(
-"theme",
-document.body.classList.contains("dark")
-? "dark"
-: "light"
-);
+    localStorage.setItem(
+    "theme",
+    document.body.classList.contains("dark")
+    ? "dark"
+    : "light"
+    );
 
+}
+
+function getCategory(title) {
+    const t = title.toLowerCase();
+
+    if (t.includes("stock") || t.includes("earnings") || t.includes("dividend"))
+        return "Finance";
+
+    if (t.includes("launch") || t.includes("product") || t.includes("technology"))
+        return "Products";
+
+    if (t.includes("project") || t.includes("contract") || t.includes("installation"))
+        return "Projects";
+
+    return "General";
 }
 
 if(localStorage.getItem("theme")==="dark"){
